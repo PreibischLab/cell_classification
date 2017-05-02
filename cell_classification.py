@@ -14,7 +14,7 @@ from sklearn.metrics import classification_report, precision_score, recall_score
 # some constants
 # defines how many gaussian rings you take
 sigmas=[2, 4]
-is3D = False
+is3D = True
 
 # extended to 3D feature generation
 def generate_features3D(image, sigma):
