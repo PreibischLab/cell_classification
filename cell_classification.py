@@ -1,4 +1,5 @@
 # start step-by step
+print ("hello")
 from skimage import io
 from skimage.external import tifffile # io for tif-files
 import numpy as np
@@ -11,10 +12,17 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split, StratifiedKFold
 from sklearn.metrics import classification_report, precision_score, recall_score, roc_auc_score
 
+from threading import active_count
+
+print("importing libraries: done")
+
 # some constants
 # defines how many gaussian rings you take
 sigmas=[2, 4]
 is3D = False
+num_procs = 2 
+
+print("# of available threads:", active_count())
 
 # extended to 3D feature generation
 def generate_features3D(image, sigma):
@@ -83,7 +91,7 @@ for train_ix, test_ix in skf.split(X, y): # for each of K folds
     y_train, y_test = y[train_ix], y[test_ix]
 
     # Train classifier
-    clf = RandomForestClassifier(n_jobs=-1)
+    clf = RandomForestClassifier(n_jobs=num_procs)
     clf.fit(X_train, y_train)
 
     # Predict test set labels
