@@ -12,7 +12,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split, StratifiedKFold
 from sklearn.metrics import classification_report, precision_score, recall_score, roc_auc_score
 
+import timeit
 from threading import active_count
+import multiprocessing as mp 
 
 print("importing libraries: done")
 
@@ -20,9 +22,13 @@ print("importing libraries: done")
 # defines how many gaussian rings you take
 sigmas=[2, 4]
 is3D = False
-num_procs = 2 
+num_procs = 8 
 
 print("# of available threads:", active_count())
+print("# of available procs:", mp.cpu_count())
+print("# of procs set:", num_procs)
+
+mp.cpu_count()
 
 # extended to 3D feature generation
 def generate_features3D(image, sigma):
@@ -84,6 +90,9 @@ precision_scores = list()
 recall_scores = list()
 aucs = list()
 
+
+start_time = timeit.default_timer()
+
 k_fold_idx = 0
 for train_ix, test_ix in skf.split(X, y): # for each of K folds
     # define training and test sets
@@ -105,7 +114,9 @@ for train_ix, test_ix in skf.split(X, y): # for each of K folds
 
     print ("K-fold iteration", k_fold_idx, ": done")
     k_fold_idx += 1
-print("training classifier: done")
+
+elapsed = timeit.default_timer() - start_time
+print("training classifier: done in", elapsed, "sec")
 
 # save the classifier to the file
 # sys.setrecursionlimit(10000) # but you might need this one
