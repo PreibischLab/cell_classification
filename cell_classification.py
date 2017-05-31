@@ -134,9 +134,10 @@ raw_real = io.imread('data/raw-85.tif')
 X_real = generate_features3D(raw_real, sigmas);
 print("generating features: done")
 
+# predict classes for the image
 raw_real_predicted = clf.predict(X_real)
 raw_real_predicted_proba = clf.predict_proba(X_real)
-print("generating features: done")
+print("predicting classes: done")
 
 result = np.reshape(raw_real_predicted, raw_real.shape)
 # to save as 32-bit tif
@@ -144,9 +145,9 @@ result_proba = np.ndarray(shape=(raw_real.shape), dtype=np.float32)
 result_proba[()] = np.reshape(raw_real_predicted_proba[:, 1], raw_real.shape)
 
 
-tifffile.imsave('data/raw.tif', raw_real)
-tifffile.imsave('data/result.tif', result)
-tifffile.imsave('data/proba.tif', result_proba)
+tifffile.imsave('data/o_raw.tif', raw_real)
+tifffile.imsave('data/o_result.tif', result)
+tifffile.imsave('data/o_proba.tif', result_proba)
 
 print("saving results: done")
 
